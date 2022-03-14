@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ezen.spg12.dao.IbbsDao">
+	<select id="list" resultType="com.ezen.spg12.dto.bbsDto">
+		SELECT * FROM bbs ORDER BY id DESC
+	</select>
+	
+<!-- 	void 라면 resultType 없음 
+		2개 이상의 파라미터가 있다면 parameterType 안씀
+	<insert id="write">
+		INSERT INTO bbs VALUES(bbs_seq.nextVal, #{param1}, #{param2}, #{param3})
+	</insert>-->
+	
+	<insert id="write" parameterType="com.ezen.spg12.dto.bbsDto">
+		INSERT INTO bbs VALUES(bbs_seq.nextVal, #{writer}, #{title}, #{content})
+	</insert>
+	
+	<select id="view" resultType="com.ezen.spg12.dto.bbsDto">
+		SELECT * FROM bbs WHERE id=#{param1}
+	</select>
+	
+</mapper>
+	
+	
+	
+	
+	
+	
