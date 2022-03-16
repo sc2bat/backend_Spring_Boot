@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ezen.spg15.dao.IBoardDao">
+	
+	<select id="getAllCount" resultType="_int">
+		SELECT COUNT(*) AS cnt FROM board
+	</select>
+	
+	<select id="getBoardListAll" resultType="com.ezen.spg15.dto.BoardVO"
+		parameterType="com.ezen.spg15.dto.Paging">
+		SELECT * FROM (
+			SELECT * FROM (
+				SELECT ROWNUM AS rn, b.* FROM board b ORDER BY num DESC
+<!-- 			) WHERE rn >= #{param.getStartNum()} -->
+<!-- 		) WHERE rn <= #{param.getEndNum()} -->
+			) WHERE rn &gt;= #{startNum}
+		) WHERE rn &lt;= #{endNum}
+	</select>
+	
+	<insert id="insertBoard" parameterType="com.ezen.spg15.dto.BoardVO">
+		INSERT INTO board(num, userid, pass, email, title, content, imgfilename)
+			VALUES(board_seq.nextVal, #{userid}, #{pass}, #{email}, #{title}, #{content}, #{imgfilename})
+	</insert>
+	
+	<update id="plusReadCount">
+		UPDATE board SET readcount=readcount+1 WHERE num=#{param1}
+	</update>
+	<select id="getBoard" resultType="com.ezen.spg15.dto.BoardVO">
+<!-- 		SELECT * FROM board WHERE num=#{num} -->
+		SELECT * FROM board WHERE num=#{param1}
+	</select>
+	<select id="getReplyList" resultType="com.ezen.spg15.dto.ReplyVO">
+<!-- 		SELECT * FROM reply WHERE boardnum=#{num} -->
+		SELECT * FROM reply WHERE boardnum=#{param1}
+	</select>
+	
+	<insert id="addReply">
+		INSERT INTO reply(num, boardnum, userid, content) VALUES(reply_seq.nextVal, #{param1}, #{param2}, #{param3})
+	</insert>
+	
+	<delete id="deleteReply">
+		DELETE FROM reply WHERE num=#{param1}
+	</delete>
+</mapper>
